@@ -19,4 +19,8 @@
         <Using Include="Xunit"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Jr. NBA League Romania\Jr. NBA League Romania.csproj" />
+    </ItemGroup>
+
 </Project>
