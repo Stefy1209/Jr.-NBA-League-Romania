@@ -34,4 +34,35 @@ public class StudentTests
         Assert.Equal(id2, expectedId2);
         Assert.Equal(id3, expectedId3);
     }
+    
+    [Fact]
+    public void Student_GetName_ReturnString()
+    {
+        //Arrange
+        var id1 = Guid.NewGuid();
+        var id2 = Guid.NewGuid();
+        var id3 = Guid.NewGuid();
+        
+        const string name1 = "Name1";
+        const string name2 = "Name2";
+        const string name3 = "Name3";
+        
+        const string school1 = "School1";
+        const string school2 = "School2";
+        const string school3 = "School3";
+        
+        var student1 = new Student(id1, name1, school1);
+        var student2 = new Student(id2, name2, school2);
+        var student3 = new Student(id3, name3, school3);
+        
+        //Act
+        var expectedName1 = student1.Name;
+        var expectedName2 = student2.Name;
+        var expectedName3 = student3.Name;
+        
+        //Assert
+        Assert.Equal(name1, expectedName1);
+        Assert.Equal(name2, expectedName2);
+        Assert.Equal(name3, expectedName3);
+    }
 }
