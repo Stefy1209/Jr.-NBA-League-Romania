@@ -14,7 +14,8 @@ public interface IRepository<in TId, TEntity> where TEntity : Entity<TId>
     /// </summary>
     /// <param name="id">The id of the entity to be returned. Must not be null.</param>
     /// <returns>A nullable TEntity (TEntity?), which may be null if no entity with the given id is found.</returns>
-    TEntity? FindOne(TId id);
+    /// <exception cref="ArgumentNullException">Thrown when the id is null.</exception>
+    TEntity? FindOne(TId? id);
     
     /// <summary>
     /// Returns all entities of type TEntity.
@@ -27,12 +28,14 @@ public interface IRepository<in TId, TEntity> where TEntity : Entity<TId>
     /// </summary>
     /// <param name="entity">The given entity to be saved. Must not be null.</param>
     /// <returns>Null if the entity is saved, the entity otherwise.</returns>
-    TEntity? Save(TEntity entity);
+    /// <exception cref="ArgumentNullException">Thrown when the entity is null.</exception>
+    TEntity? Save(TEntity? entity);
     
     /// <summary>
     /// Deletes the entity with the given id from repository.
     /// </summary>
     /// <param name="id">The id of the entity to be deleted. Must not be null.</param>
     /// <returns>The entity with the given id if it is deleted, null otherwise.</returns>
-    TEntity? Delete(TId id);
+    /// <exception cref="ArgumentNullException">Thrown when id is null.</exception>
+    TEntity? Delete(TId? id);
 }
