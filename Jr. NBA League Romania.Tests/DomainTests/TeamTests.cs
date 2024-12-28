@@ -57,4 +57,27 @@ public class TeamTests
         Assert.Equal(id2, expectedId2);
         Assert.Equal(id3, expectedId3);
     }
+
+    [Fact]
+    public void Team_Equals_ReturnBoolean()
+    {
+        //Arrange
+        var id1 = Guid.NewGuid();
+        var id2 = Guid.NewGuid();
+
+        const string name1 = "Team1";
+        const string name2 = "Team2";
+
+        var team1 = new Team(id1, name1);
+        var team2 = new Team(id2, name2);
+        var team3 = new Team(id1, name1);
+
+        //Act
+        var actualResult1 = Equals(team1, team2);
+        var actualResult2 = Equals(team1, team3);
+
+        //Assert
+        Assert.False(actualResult1);
+        Assert.True(actualResult2);
+    }
 }
