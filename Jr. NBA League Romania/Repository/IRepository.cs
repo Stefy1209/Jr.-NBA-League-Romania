@@ -27,7 +27,7 @@ public interface IRepository<in TId, TEntity> where TEntity : Entity<TId>
     /// Saves the given entity in the repository.
     /// </summary>
     /// <param name="entity">The given entity to be saved. Must not be null.</param>
-    /// <returns>Null if the entity is saved, the entity otherwise.</returns>
+    /// <returns>Null if the entity is saved, the entity otherwise(id already exists).</returns>
     /// <exception cref="ArgumentNullException">Thrown when the entity is null.</exception>
     TEntity? Save(TEntity? entity);
     
