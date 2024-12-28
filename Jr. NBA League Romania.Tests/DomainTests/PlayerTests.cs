@@ -13,9 +13,9 @@ public class PlayerTests
     private const string Name2 = "Name2";
     private const string Name3 = "Name3";
     
-    private const string School1 = "School1";
-    private const string School2 = "School2";
-    private const string School3 = "School3";
+    private static readonly Guid School1 = Guid.NewGuid();
+    private static readonly Guid School2 = Guid.NewGuid();
+    private static readonly Guid School3 = Guid.NewGuid();
     
     private static readonly Guid Team1Id = Guid.NewGuid();
     private static readonly Guid Team2Id = Guid.NewGuid();
