@@ -57,9 +57,9 @@ public class PlayerTests
     public void Player_GetSchool_ReturnString()
     {
         //Act
-        var expectedSchool1 = _player1.School;
-        var expectedSchool2 = _player2.School;
-        var expectedSchool3 = _player3.School;
+        var expectedSchool1 = _player1.SchoolId;
+        var expectedSchool2 = _player2.SchoolId;
+        var expectedSchool3 = _player3.SchoolId;
         
         //Assert
         Assert.Equal(School1, expectedSchool1);
