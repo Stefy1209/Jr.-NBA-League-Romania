@@ -2,5 +2,5 @@
 
 public enum ActivePlayerType
 {
-    Active, Substitute
+    Active = 0, Substitute = 1
 }
