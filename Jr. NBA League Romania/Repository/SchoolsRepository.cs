@@ -3,17 +3,15 @@ using Npgsql;
 
 namespace Jr._NBA_League_Romania.Repository;
 
-public class SchoolsRepository : IRepository<Guid, School>
+public class SchoolsRepository : AbstractRepository<Guid, School>
 {
-    private const string ConnString = "Host=localhost;Username=postgres;Password=1234;Database=Jr. NBA League Romania";
-    
-    public School? FindOne(Guid id)
+    public override School? FindOne(Guid id)
     {
         if(id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
         try
         {
-            using var conn = Connect();
+            using var conn = GetConnection();
             
             using var cmd = new NpgsqlCommand("select name from \"Schools\" where id = @id", conn);
             cmd.Parameters.AddWithValue("@id", id);
@@ -29,11 +27,11 @@ public class SchoolsRepository : IRepository<Guid, School>
         }
     }
 
-    public IEnumerable<School> FindAll()
+    public override IEnumerable<School> FindAll()
     {
         try
         {
-            using var conn = Connect();
+            using var conn = GetConnection();
             
             using var cmd = new NpgsqlCommand("select id, name from \"Schools\"", conn);
             using var reader = cmd.ExecuteReader();
@@ -54,13 +52,13 @@ public class SchoolsRepository : IRepository<Guid, School>
         }
     }
 
-    public School? Save(School? entity)
+    public override School? Save(School? entity)
     {
         ArgumentNullException.ThrowIfNull(entity, nameof(entity));
 
         try
         {
-            using var conn = Connect();
+            using var conn = GetConnection();
 
             using var cmd = new NpgsqlCommand("insert into \"Schools\" (id, name) values (@id, @name)", conn);
             cmd.Parameters.AddWithValue("@id", entity.Id);
@@ -75,7 +73,7 @@ public class SchoolsRepository : IRepository<Guid, School>
         }
     }
 
-    public School? Delete(Guid id)
+    public override School? Delete(Guid id)
     {
         if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
@@ -85,7 +83,7 @@ public class SchoolsRepository : IRepository<Guid, School>
             
             if(school == null) return null;
             
-            using var conn = Connect();
+            using var conn = GetConnection();
             
             using var cmd = new NpgsqlCommand("delete from \"Schools\" where id = @id", conn);
             cmd.Parameters.AddWithValue("@id", id);
@@ -97,13 +95,5 @@ public class SchoolsRepository : IRepository<Guid, School>
             Console.WriteLine(e);
             throw;
         }
-    }
-    
-    private static NpgsqlConnection Connect()
-    {
-        var conn = new NpgsqlConnection(ConnString);
-        conn.Open();
-        
-        return conn;
     }
 }
