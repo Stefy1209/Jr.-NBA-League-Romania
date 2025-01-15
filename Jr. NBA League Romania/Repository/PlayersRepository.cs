@@ -3,17 +3,15 @@ using Npgsql;
 
 namespace Jr._NBA_League_Romania.Repository;
 
-public class PlayersRepository : IRepository<Guid, Player>
+public class PlayersRepository : AbstractRepository<Guid, Player>
 {
-    private const string ConnString = "Host=localhost;Username=postgres;Password=1234;Database=Jr. NBA League Romania";
-
-    public Player? FindOne(Guid id)
+    public override Player? FindOne(Guid id)
     {
         if(id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
         try
         {
-            using var conn = Connect();
+            using var conn = GetConnection();
             
             using var cmd = new NpgsqlCommand("select name, id_team from \"Players\" where id = @id", conn);
             cmd.Parameters.AddWithValue("@id", id);
@@ -29,11 +27,11 @@ public class PlayersRepository : IRepository<Guid, Player>
         }
     }
 
-    public IEnumerable<Player> FindAll()
+    public override IEnumerable<Player> FindAll()
     {
         try
         {
-            using var conn = Connect();
+            using var conn = GetConnection();
             
             using var cmd = new NpgsqlCommand("select id, name, id_team from \"Players\"", conn);
             
@@ -59,13 +57,13 @@ public class PlayersRepository : IRepository<Guid, Player>
         }
     }
 
-    public Player? Save(Player? entity)
+    public override Player? Save(Player? entity)
     {
         ArgumentNullException.ThrowIfNull(entity);
 
         try
         {
-            using var conn = Connect();
+            using var conn = GetConnection();
 
             using var cmd = new NpgsqlCommand("insert into \"Players\" (id, name, id_team) values (@id, @name, @id_team)", conn);
             cmd.Parameters.AddWithValue("@id", entity.Id);
@@ -81,7 +79,7 @@ public class PlayersRepository : IRepository<Guid, Player>
         }
     }
 
-    public Player? Delete(Guid id)
+    public override Player? Delete(Guid id)
     {
         if(id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
@@ -91,7 +89,7 @@ public class PlayersRepository : IRepository<Guid, Player>
             
             if(player == null) return null;
             
-            using var conn = Connect();
+            using var conn = GetConnection();
             
             using var cmd = new NpgsqlCommand("delete from \"Players\" where id = @id", conn);
             cmd.Parameters.AddWithValue("@id", id);
@@ -103,13 +101,5 @@ public class PlayersRepository : IRepository<Guid, Player>
             Console.WriteLine(e);
             throw;
         }
-    }
-
-    private static NpgsqlConnection Connect()
-    {
-        var conn = new NpgsqlConnection(ConnString);
-        conn.Open();
-
-        return conn;
     }
 }
