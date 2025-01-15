@@ -3,17 +3,15 @@ using Npgsql;
 
 namespace Jr._NBA_League_Romania.Repository;
 
-public class TeamsRepository : IRepository<Guid, Team>
+public class TeamsRepository : AbstractRepository<Guid, Team>
 {
-    private const string ConnString = "Host=localhost;Username=postgres;Password=1234;Database=Jr. NBA League Romania";
-    
-    public Team? FindOne(Guid id)
+    public override Team? FindOne(Guid id)
     {
         if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
         try
         {
-            using var conn = Connect();
+            using var conn = GetConnection();
 
             using var cmd = new NpgsqlCommand("select name from \"Teams\" where id = @id", conn);
             cmd.Parameters.AddWithValue("@id", id);
@@ -29,11 +27,11 @@ public class TeamsRepository : IRepository<Guid, Team>
         }
     }
 
-    public IEnumerable<Team> FindAll()
+    public override IEnumerable<Team> FindAll()
     {
         try
         {
-            using var conn = Connect();
+            using var conn = GetConnection();
             
             using var cmd = new NpgsqlCommand("select id, name from \"Teams\"", conn);
             using var reader = cmd.ExecuteReader();
@@ -54,13 +52,13 @@ public class TeamsRepository : IRepository<Guid, Team>
         }
     }
 
-    public Team? Save(Team? entity)
+    public override Team? Save(Team? entity)
     {
         ArgumentNullException.ThrowIfNull(entity, nameof(entity));
 
         try
         {
-            using var conn = Connect();
+            using var conn = GetConnection();
 
             using var cmd = new NpgsqlCommand("insert into \"Teams\" (id, name) values (@id, @name)", conn);
             cmd.Parameters.AddWithValue("@id", entity.Id);
@@ -75,7 +73,7 @@ public class TeamsRepository : IRepository<Guid, Team>
         }
     }
 
-    public Team? Delete(Guid id)
+    public override Team? Delete(Guid id)
     {
         if (id == Guid.Empty) throw new ArgumentNullException(nameof(id));
 
@@ -85,7 +83,7 @@ public class TeamsRepository : IRepository<Guid, Team>
             
             if(team == null) return null;
             
-            using var conn = Connect();
+            using var conn = GetConnection();
             
             using var cmd = new NpgsqlCommand("delete from \"Teams\" where id = @id", conn);
             cmd.Parameters.AddWithValue("@id", id);
@@ -97,13 +95,5 @@ public class TeamsRepository : IRepository<Guid, Team>
             Console.WriteLine(e);
             throw;
         }
-    }
-
-    private static NpgsqlConnection Connect()
-    {
-        var conn = new NpgsqlConnection(ConnString);
-        conn.Open();
-        
-        return conn;
     }
 }
